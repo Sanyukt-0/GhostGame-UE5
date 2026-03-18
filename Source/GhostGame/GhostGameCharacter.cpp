@@ -45,6 +45,8 @@ AGhostGameCharacter::AGhostGameCharacter()
 	// Activate ticking in order to update the cursor every frame.
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.bStartWithTickEnabled = true;
+
+	GetCharacterMovement()->NavAgentProps.bCanCrouch = true;
 }
 
 void AGhostGameCharacter::BeginPlay()

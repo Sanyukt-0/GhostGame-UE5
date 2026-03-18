@@ -22,6 +22,7 @@ void AGhostGamePlayerController::SetupInputComponent()
 {
 	// set up gameplay key bindings
 	Super::SetupInputComponent();
+	UE_LOG(LogTemp, Warning, TEXT("SetupInputComponent called"));
 
 	// Only set up input on local player controllers
 	if (IsLocalPlayerController())
@@ -56,8 +57,13 @@ void AGhostGamePlayerController::Move(const FInputActionValue & Value)
 	FVector2D MovementVector = Value.Get<FVector2D>();
 	APawn* ControlPawn = GetPawn();
 
-	const FVector ForwardDirection = FVector::ForwardVector;
-	const FVector RightDirection = FVector::RightVector;
+	/*const FVector ForwardDirection = FVector::ForwardVector;
+	const FVector RightDirection = FVector::RightVector;*/
+
+	const FRotator Rotation = FRotator(0.f, 0.f, 0.f);
+	const FVector ForwardDirection = FRotationMatrix(Rotation).GetUnitAxis(EAxis::X);
+	const FVector RightDirection = FRotationMatrix(Rotation).GetUnitAxis(EAxis::Y);
+
 
 	if (ControlPawn) {
 		ControlPawn->AddMovementInput(ForwardDirection, MovementVector.Y);
@@ -68,10 +74,23 @@ void AGhostGamePlayerController::Move(const FInputActionValue & Value)
 
 void AGhostGamePlayerController::StartCrouch()
 {
+	UE_LOG(LogTemp, Warning, TEXT("StartCrouch called"));
+	ACharacter* MyCharacter = Cast<ACharacter>(GetPawn());
 
+	if (MyCharacter) {
+		UE_LOG(LogTemp, Warning, TEXT("Character found, crouching"));
+		MyCharacter->Crouch();
+	}
+	else {
+		UE_LOG(LogTemp, Warning, TEXT("Character is null!"));
+	}
 }
 
 void AGhostGamePlayerController::EndCrouch()
 {
+	ACharacter* MyCharacter = Cast<ACharacter>(GetPawn());
 
+	if (MyCharacter) {
+		MyCharacter->UnCrouch();
+	}
 }
